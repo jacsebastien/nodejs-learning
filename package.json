@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-learning",
+  "version": "1.0.0",
+  "description": "My code following Udemy course: https://www.udemy.com/course/nodejs-the-complete-guide/",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacsebastien/nodejs-learning.git"
+  },
+  "author": "Sebastien Jacques",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jacsebastien/nodejs-learning/issues"
+  },
+  "homepage": "https://github.com/jacsebastien/nodejs-learning#readme"
+}
