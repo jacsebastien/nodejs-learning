@@ -9,8 +9,13 @@ const router = express.Router();
 // router.use is triggerd for every kind of request (get/post/...)
 // router.get check for exact route
 router.get('/', (req, res, next) => {
-  console.log('[shop.js]', adminData.products);
-  res.sendFile(path.join(rootDir, 'views', 'shop.html'));
+  const products = adminData.products;
+  // Use default template engine to render the page
+  res.render('shop', {
+    products,
+    pageTitle: "Shop",
+    path: '/'
+  });
 });
 
 module.exports = router;
