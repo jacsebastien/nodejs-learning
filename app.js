@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
 // Define static folder to allow accessing ressources
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', adminRoutes);
+app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 
 // Default route: '/' => matches every routes
