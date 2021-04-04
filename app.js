@@ -2,13 +2,20 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const handlebars = require('express-handlebars');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 const app = express();
 
-app.set('view engine', 'pug');
+app.engine('hbs', handlebars({
+  layoutsDir: 'views/layouts/',
+  defaultLayout: 'main',
+  extname: 'hbs'
+}));
+app.set('view engine', 'hbs');
+// app.set('view engine', 'pug');
 app.set('views', 'views'); // Default value
 
 // Allow to parse and retrieve body of requests
