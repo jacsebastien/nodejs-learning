@@ -7,6 +7,8 @@ const handlebars = require('express-handlebars');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
+const errorsController = require('./controllers/errors');
+
 const app = express();
 
 app.engine('hbs', handlebars({
@@ -21,14 +23,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin', adminRoutes.routes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).render('404', {
-    pageTitle: 'Page Not Found',
-    path: "404"
-  });
-});
+app.use(errorsController.get404);
 
 app.listen(3000)
