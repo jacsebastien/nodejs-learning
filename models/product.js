@@ -14,6 +14,7 @@ module.exports = class Product {
   }
 
   save() {
+    this.id = Math.random().toString();
     Product.fetchAll(products => {
       // "this" refers to the product created in this class
       products.push(this);
