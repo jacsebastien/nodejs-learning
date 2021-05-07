@@ -13,7 +13,7 @@
                     <p class="product__description">{{this.description}}</p>
                 </div>
                 <div class="card__actions">
-                    <button class="btn">Add to Cart</button>
+                    {{> add-to-cart-button productId=this.id}}
                 </div>
             </article>
         {{/each}}

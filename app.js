@@ -13,6 +13,7 @@ const app = express();
 
 app.engine('hbs', handlebars({
   layoutsDir: 'views/layouts/',
+  partialsDir: 'views/partials',
   defaultLayout: 'main',
   extname: 'hbs'
 }));

@@ -25,3 +25,12 @@
 .product__description {
     text-align: center;
 }
+
+.product-details {
+    text-align: center;
+}
+
+.product-details img {
+    max-width: 400px;
+    height: auto;
+}
