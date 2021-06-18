@@ -12,8 +12,12 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
   const product = new Product(title, imageUrl, description, price);
-  product.save();
-  res.redirect('/');
+  product
+    .save()
+    .then(() => {
+      res.redirect('/');
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -41,19 +45,21 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('admin/product-list', {
-      products,
-      pageTitle: 'Admin Products',
-      active: {
-        adminProducts: true,
-      },
-    });
-  });
+  Product.fetchAll()
+    .then(([rows, metaData]) => {
+      res.render('admin/product-list', {
+        products: rows,
+        pageTitle: 'Admin Products',
+        active: {
+          adminProducts: true,
+        },
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.postDeleteProducts = (req, res, next) => {
   const productId = req.params.id;
   Product.deleteById(productId);
   res.redirect('/admin/products');
-}
+};
