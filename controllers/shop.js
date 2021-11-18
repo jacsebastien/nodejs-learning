@@ -2,9 +2,8 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    // DB Select return array of arrays which first element contains data and second metaData
-    .then(([products, metaData]) => {
+  Product.findAll()
+    .then(products => {
       res.render('shop/product-list', {
         products,
         pageTitle: 'All Products',
@@ -18,11 +17,10 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const productId = req.params.id;
-  Product.findById(productId)
-    .then(([products]) => {
-      // DB SELECT always returns an array event if we select only one element
+  Product.findByPk(productId)
+    .then(product => {
       res.render('shop/product-detail', {
-        product: products[0],
+        product: product,
         pageTitle: 'Product Details',
         active: {
           products: true,
@@ -33,8 +31,8 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([products]) => {
+  Product.findAll()
+    .then(products => {
       res.render('shop/index', {
         products,
         pageTitle: 'Shop',
