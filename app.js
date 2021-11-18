@@ -12,6 +12,8 @@ const User = require('./models/user');
 
 const app = express();
 
+const dummyUserId = 1;
+
 app.engine(
   'hbs',
   handlebars({
@@ -34,6 +36,15 @@ app.use(
 );
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  User.findByPk(dummyUserId)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
@@ -45,8 +56,20 @@ User.hasMany(Product);
 
 // sync models to database and create relations
 sequelize
-  .sync({ force: true })
+  // .sync({ force: true })
+  .sync()
   .then(result => {
+    // Check if dummy user exists
+    return User.findByPk(dummyUserId);
+  })
+  .then(user => {
+    // Create dummy user if not exists
+    if (!user) {
+      return User.create({ name: 'Seb', email: 'test@test.com' });
+    }
+    return user;
+  })
+  .then(() => {
     // Start node server only if we succeed to sync to the DB
     app.listen(3000);
   })
