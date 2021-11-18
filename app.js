@@ -7,6 +7,8 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorsController = require('./controllers/errors');
 const sequelize = require('./utils/database');
+const Product = require('./models/product');
+const User = require('./models/user');
 
 const app = express();
 
@@ -37,9 +39,13 @@ app.use(shopRoutes);
 
 app.use(errorsController.get404);
 
+// Make sequelize associations
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+
 // sync models to database and create relations
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(result => {
     // Start node server only if we succeed to sync to the DB
     app.listen(3000);
