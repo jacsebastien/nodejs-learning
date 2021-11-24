@@ -45,29 +45,22 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  Cart.getCart(cart => {
-    Product.fetchAll(products => {
-      const cartProducts = cart.products.reduce((completeCart, cartProduct) => {
-        const fullProduct = products.find(p => p.id === cartProduct.id);
-
-        if (fullProduct) {
-          return [...completeCart, { ...cartProduct, ...fullProduct }];
-        }
-
-        return completeCart;
-      }, []);
-
-      console.log(cartProducts);
-
+  req.user
+    .getCart()
+    .then(cart => {
+      return cart.getProducts();
+    })
+    .then(products => {
+      console.log(products);
       res.render('shop/cart', {
         pageTitle: 'Your Cart',
         active: {
           cart: true,
         },
-        products: cartProducts,
+        products: products,
       });
-    });
-  });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.postCart = (req, res, next) => {
