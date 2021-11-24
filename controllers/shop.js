@@ -51,7 +51,6 @@ exports.getCart = (req, res, next) => {
       return cart.getProducts();
     })
     .then(products => {
-      console.log(products);
       res.render('shop/cart', {
         pageTitle: 'Your Cart',
         active: {
@@ -65,10 +64,28 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const productId = req.body.productId;
-  Product.findById(productId, product => {
-    Cart.addProduct(productId, product.price);
-    res.redirect('/cart');
-  });
+  req.user
+    .getCart()
+    .then(cart => cart.getProducts({ where: { id: productId } }).then(productsFromCart => ({ cart, productsFromCart })))
+    .then(({ cart, productsFromCart }) => {
+      if (productsFromCart.length) {
+        const product = productsFromCart[0];
+        const quantity = product.cartItem.quantity;
+        return { cart, product, quantity: quantity + 1 };
+      }
+
+      return Product.findByPk(productId)
+        .then(product => ({ cart, product, quantity: 1 }))
+        .catch(err => console.log(err));
+    })
+    .then(({ cart, product, quantity }) => {
+      // Cart is Linked to CartItem with "through" keyword so we can update quantity from CartItem
+      return cart.addProduct(product, { through: { quantity: quantity } });
+    })
+    .then(() => {
+      res.redirect('/cart');
+    })
+    .catch(err => console.log(err));
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {

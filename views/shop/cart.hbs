@@ -1,7 +1,7 @@
 {{#if products.length}}
     {{#each products}}
         <li>
-            <span>{{this.title}} ({{this.qty}})</span>
+            <span>{{this.title}} ({{this.cartItem.quantity}})</span>
             <form action="/cart/delete/{{this.id}}" method="post">
                 <button type="submit" class="btn">Delete</button>
             </form>
