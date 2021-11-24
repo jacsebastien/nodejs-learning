@@ -1,16 +1,15 @@
-{{#if orders.length}}
-    <ul>
-        {{#each orders}}
-            <li>
-                <h2># {{this.id}}</h2>
-                <ul>
-                    {{#each this.products}}
-                        <li>{{this.title}} ({{this.orderItem.quantity}})</li>
-                    {{/each}}
-                </ul>
-            </li>
-        {{/each}}
-    </ul>
-{{else}}
-    <h1>No orders</h1>
-{{/if}}
+<h1>Your orders</h1>
+<ul>
+    {{#each orders}}
+        <li>
+            <h2>#{{this.id}}</h2>
+            <ul>
+                {{#each this.products}}
+                    <li>{{this.title}} ({{this.orderItem.quantity}})</li>
+                {{/each}}
+            </ul>
+        </li>
+    {{else}}
+        <li>No orders</li>
+    {{/each}}
+</ul>
