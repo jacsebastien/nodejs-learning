@@ -5,8 +5,11 @@ const handlebars = require('express-handlebars');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
+
 const errorsController = require('./controllers/errors');
 const sequelize = require('./utils/database');
+
 const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
@@ -51,6 +54,7 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use(errorsController.get404);
 
