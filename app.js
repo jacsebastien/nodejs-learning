@@ -77,8 +77,16 @@ sequelize
     return user;
   })
   .then(user => {
-    // Create dummy cart for user
-    return user.createCart();
+    // Create dummy cart for user if not exists
+    user
+      .getCart()
+      .then(cart => {
+        if (cart) {
+          return cart;
+        }
+        return user.createCart();
+      })
+      .catch(err => console.log(err));
   })
   .then(() => {
     // Start node server only if we succeed to sync to the DB
