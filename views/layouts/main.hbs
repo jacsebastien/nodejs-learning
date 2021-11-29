@@ -29,7 +29,15 @@
                 {{/if}}
             </ul>
             <ul class="main-header__item-list">
-                <li class="main-header__item"><a class="{{#if active.login}}active{{/if}}" href="/login">Login</a></li>
+                {{#if isAuthenticated}}
+                    <li class="main-header__item">
+                        <form action="/logout" method="POST">
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                {{else}}
+                    <li class="main-header__item"><a class="{{#if active.login}}active{{/if}}" href="/login">Login</a></li>
+                {{/if}}
             </ul>
         </nav>
     </header>

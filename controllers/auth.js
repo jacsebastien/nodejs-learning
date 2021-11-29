@@ -8,7 +8,6 @@ exports.getLogin = (req, res, next) => {
     active: {
       login: true,
     },
-    isAuthenticated: !!req.sessionUser,
   });
 };
 
@@ -20,4 +19,11 @@ exports.postLogin = (req, res, next) => {
       res.redirect('/');
     })
     .catch(err => console.log(err));
+};
+
+exports.postLogout = (req, res, next) => {
+  req.session.destroy((err) => {
+    console.log(err);
+    res.redirect('/')
+  })
 };

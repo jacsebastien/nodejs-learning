@@ -1,4 +1,4 @@
-<form class="product-form" action="{{#if product}}/admin/edit-product{{else}}/admin/add-product{{/if}}" method="POST">
+<form class="basic-form" action="{{#if product}}/admin/edit-product{{else}}/admin/add-product{{/if}}" method="POST">
     <div class="form-control">
         <label for="title">Title</label>
         <input type="text" name="title" id="title" value="{{#if product}}{{product.title}}{{/if}}" />
