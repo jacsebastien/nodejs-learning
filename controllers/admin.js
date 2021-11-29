@@ -6,23 +6,26 @@ exports.getAddProduct = (req, res, next) => {
     active: {
       addProduct: true,
     },
+    isAuthenticated: !!req.sessionUser,
   });
 };
 
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
-  const user = req.user;
+  const user = req.sessionUser;
 
   user
     .createProduct({ title, price, imageUrl, description })
-    // Product.create({ title, price, imageUrl, description, userId: req.user.id })
+    // Product.create({ title, price, imageUrl, description, userId: user.id })
     .then(() => res.redirect('/admin/products'))
     .catch(err => console.log(err));
 };
 
 exports.getEditProduct = (req, res, next) => {
   const productId = req.params.id;
-  req.user
+  const user = req.sessionUser;
+
+  user
     .getProducts({ where: { id: productId } })
     // Product.findByPk(productId)
     .then(products => {
@@ -37,6 +40,7 @@ exports.getEditProduct = (req, res, next) => {
           editProduct: true,
         },
         product,
+        isAuthenticated: !!req.sessionUser,
       });
     })
     .catch(err => console.log(err));
@@ -57,7 +61,9 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  req.user
+  const user = req.sessionUser;
+
+  user
     .getProducts()
     // Product.findAll()
     .then(products => {
@@ -67,6 +73,7 @@ exports.getProducts = (req, res, next) => {
         active: {
           adminProducts: true,
         },
+        isAuthenticated: !!req.sessionUser,
       });
     })
     .catch(err => console.log(err));

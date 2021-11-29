@@ -9,6 +9,7 @@ exports.getProducts = (req, res, next) => {
         active: {
           products: true,
         },
+        isAuthenticated: !!req.sessionUser,
       });
     })
     .catch(err => console.log(err));
@@ -24,6 +25,7 @@ exports.getProduct = (req, res, next) => {
         active: {
           products: true,
         },
+        isAuthenticated: !!req.sessionUser,
       });
     })
     .catch(err => console.log(err));
@@ -38,13 +40,16 @@ exports.getIndex = (req, res, next) => {
         active: {
           shop: true,
         },
+        isAuthenticated: !!req.sessionUser,
       });
     })
     .catch(err => console.log(err));
 };
 
 exports.getCart = (req, res, next) => {
-  req.user
+  const user = req.sessionUser;
+
+  user
     .getCart()
     .then(cart => {
       return cart.getProducts();
@@ -56,6 +61,7 @@ exports.getCart = (req, res, next) => {
           cart: true,
         },
         products: products,
+        isAuthenticated: !!req.sessionUser,
       });
     })
     .catch(err => console.log(err));
@@ -63,7 +69,9 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const productId = req.body.productId;
-  req.user
+  const user = req.sessionUser;
+
+  user
     .getCart()
     .then(cart => cart.getProducts({ where: { id: productId } }).then(productsFromCart => ({ cart, productsFromCart })))
     .then(({ cart, productsFromCart }) => {
@@ -89,7 +97,9 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDeleteProduct = (req, res, next) => {
   const productId = req.params.id;
-  req.user
+  const user = req.sessionUser;
+
+  user
     .getCart()
     .then(cart => cart.getProducts({ where: { id: productId } }))
     .then(products => {
@@ -104,15 +114,17 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
+  const user = req.sessionUser;
   let fetchedCart;
-  req.user
+
+  user
     .getCart()
     .then(cart => {
       fetchedCart = cart;
       return cart.getProducts();
     })
     .then(products => {
-      return req.user
+      return user
         .createOrder()
         .then(order => {
           return order.addProducts(
@@ -134,7 +146,9 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  req.user
+  const user = req.sessionUser;
+
+  user
     .getOrders({ include: ['products'] })
     .then(orders => {
       res.render('shop/orders', {
@@ -143,6 +157,7 @@ exports.getOrders = (req, res, next) => {
           orders: true,
         },
         orders,
+        isAuthenticated: !!req.sessionUser,
       });
     })
     .catch(err => console.log(err));

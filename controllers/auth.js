@@ -1,17 +1,23 @@
-exports.getLogin = (req, res, next) => {
-  const isAuthenticated = req.session.isAuthenticated;
+const User = require('../models/user');
 
+const dummyUserId = 1;
+
+exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     pageTitle: 'Login',
     active: {
       login: true,
     },
-    isAuthenticated
+    isAuthenticated: !!req.sessionUser,
   });
 };
 
 exports.postLogin = (req, res, next) => {
-  // Use session to create crypted cookie values
-  req.session.isAuthenticated = true;
-  res.redirect('/');
+  User.findByPk(dummyUserId)
+    .then(user => {
+      // Use session to create crypted cookie values
+      req.session.user = user;
+      res.redirect('/');
+    })
+    .catch(err => console.log(err));
 };

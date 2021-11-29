@@ -56,12 +56,10 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  User.findByPk(dummyUserId)
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.log(err));
+  //creates a User instance based on the user of current session
+  const sessionUser = req.session && req.session.user ? User.build({ ...req.session.user }) : null;
+  req.sessionUser = sessionUser;
+  next();
 });
 
 app.use('/admin', adminRoutes);
