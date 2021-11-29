@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const handlebars = require('express-handlebars');
 const session = require('express-session');
+// initalize sequelize with session store
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -43,7 +45,15 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'node js on the rock !', resave: false, saveUninitialized: false }));
+
+app.use(
+  session({
+    secret: 'node js on the rock !',
+    store: new SequelizeStore({ db: sequelize }),
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use((req, res, next) => {
   User.findByPk(dummyUserId)
