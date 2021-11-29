@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const handlebars = require('express-handlebars');
+const session = require('express-session');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -42,6 +43,7 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ secret: 'node js on the rock !', resave: false, saveUninitialized: false }));
 
 app.use((req, res, next) => {
   User.findByPk(dummyUserId)
