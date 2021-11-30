@@ -16,14 +16,17 @@ exports.postLogin = (req, res, next) => {
     .then(user => {
       // Use session to create crypted cookie values
       req.session.user = user;
-      res.redirect('/');
+      req.session.save(err => {
+        console.log(err);
+        res.redirect('/');
+      });
     })
     .catch(err => console.log(err));
 };
 
 exports.postLogout = (req, res, next) => {
-  req.session.destroy((err) => {
+  req.session.destroy(err => {
     console.log(err);
-    res.redirect('/')
-  })
+    res.redirect('/');
+  });
 };
